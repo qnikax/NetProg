@@ -1,26 +1,16 @@
-.PHONY: all clean format
+TARGET = echo
+CC = g++
+CFLAGS = -Wall -Wextra
+SRCS = echo.cpp
+OBJS = $(SRCS:.cpp=.o)
 
-CXX=g++
-CXXFLAGS=-O2 -Wall -DNDEBUG -std=c++17
-LDFLAGS= 
-PROJECT = echo_client  # ИЗМЕНИТЬ ЗДЕСЬ
-SOURCES := echo.cpp  # ИЛИ $(wildcard *.cpp)
-HEADERS := $(wildcard *.h)
-OBJECTS := $(SOURCES:%.cpp=%.o)
+all: $(TARGET)
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^
 
-all : $(PROJECT)
-
-$(PROJECT) : $(OBJECTS)
-	$(CXX) $^ $(LDFLAGS) -o $@
-	rm -f *.o *.orig
-
-%.o : %.cpp
-	$(CXX) -c $(CXXFLAGS) $< -o $@
-
-$(OBJECTS) : $(HEADERS)
-
-format:
-	astyle *.cpp *.h
-	
+%.o: %.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
 clean:
-	rm -f $(PROJECT) *.o *.orig
+	rm -f $(OBJS) $(TARGET)
+
+.PHONY: all clean
